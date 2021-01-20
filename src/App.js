@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
+import React, { useContext } from 'react'
 import './App.css'
+
+import Dex from './views/Dex'
 
 const COLORS = {
   Psychic: "#f8a5c2",
@@ -15,13 +17,14 @@ const COLORS = {
   Fire: "#eb4d4b"
 }
 
-class App extends Component {
-  render() {
-    return (
-      <div className="App">
-      </div>
-    )
-  }
+
+function App() {
+
+  return (
+    <div className="App">
+      <Dex/>
+    </div>
+  )
 }
 
 export default App

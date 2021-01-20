@@ -3,4 +3,10 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
 
-ReactDOM.render(<App />, document.getElementById('root'))
+import { DexProvider } from './stores/DexProvider'
+
+ReactDOM.render(
+    <DexProvider>
+        <App />
+    </DexProvider>
+, document.getElementById('root'))
