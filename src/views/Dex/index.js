@@ -8,14 +8,8 @@ import MyCardList from '../../components/MyCardList'
 
 function Dex() {
 
-    const [cards, setCards] = useState([]);
     const { dex, addCard, DeleteCard } = useContext(DexContext)
 
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/cards').then(res => {
-            setCards(res.data.cards)
-        })
-    }, [])
     
     return (
         <>
