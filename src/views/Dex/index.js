@@ -42,6 +42,7 @@ const CardModalButton = styled.button`
     background: #e54c45;
     font-size: 60px;
     border: none;
+    cursor: pointer;
 `
 
 export default Dex

@@ -3,9 +3,7 @@ import { useRef, useState, useEffect } from 'react';
 
 function useHover() {
     const [value, setValue] = useState(false);
-  
     const ref = useRef(null);
-  
     const handleMouseOver = () => setValue(true);
     const handleMouseOut = () => setValue(false);
   
@@ -22,7 +20,7 @@ function useHover() {
           };
         }
       },
-      [ref.current] // Recall only if ref changes
+      [ref]
     );
   
     return [ref, value];

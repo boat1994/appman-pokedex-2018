@@ -6,8 +6,7 @@ import useHover from '../hooks/useHover'
 
 import { DexContext } from '../stores/DexProvider'
 
-function PokeCard({card, isMyCard}) {
- 
+function PokeCard({ card, isMyCard }) {
     const [hoverRef, isHovered] = useHover()
 
     const { addCard, deleteCard } = useContext(DexContext)
@@ -24,7 +23,7 @@ function PokeCard({card, isMyCard}) {
     } = card
 
     return (
-        <Card ref={hoverRef} isMyCard={isMyCard} isHovered={isHovered}>
+        <Card ref={hoverRef} isMyCard={isMyCard}>
             <Left>
                 <Image src={imageUrl}/>
             </Left>
@@ -44,22 +43,21 @@ function PokeCard({card, isMyCard}) {
 
 const Card = styled.div`
     position: relative;
-    max-height: 200px;
+    height: 200px;
     margin: 10px;
     padding: 10px;
     display:flex;
     width:100%;
     background-color: #eff2f7;
-    ${({isMyCard}) => {
+    border:1px solid transparent;
+    ${({ isMyCard }) => {
         const percent = isMyCard ? 45 : 100
-        return `flex: 0 ${percent}%;`
+        return `flex: 0 ${ percent }%;`
     }}
-    ${({isHovered}) => {
-        return isHovered && `
-            border-color: azure;
-            border-style: groove;
-        `
-    }}
+    :hover {
+        border-color: azure;
+        border-style: solid;
+    }
 `
 
 const Left = styled.div`
@@ -82,10 +80,11 @@ const Action = styled.div`
     top: 8px;
     right: 16px;
     font-size: 18px;
+    color: #cf7875;
     cursor: pointer;
-    ${({isHovered}) => {
+    ${({ isHovered }) => {
         const display = isHovered ? 'block' : 'none'
-        return `display: ${display}`
+        return `display: ${ display }`
     }}
 `
 

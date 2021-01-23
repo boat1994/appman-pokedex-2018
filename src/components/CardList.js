@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import Modal from 'react-modal'
 import styled from 'styled-components'
-import axios from 'axios'
 
 import { DexContext } from '../stores/DexProvider'
 import PokeCard from './PokeCard'
+import { getCards } from '../services'
 
-function CardList({isOpen, onRequestClose}) {
+function CardList({ isOpen, onRequestClose }) {
 
     const [ cards, setCards ] = useState([])
     const [ keywords, setKeywords ] = useState("")
@@ -17,26 +17,17 @@ function CardList({isOpen, onRequestClose}) {
         Modal.setAppElement('body');
     })
 
-    useEffect(() => {
-        axios.get('http://localhost:3030/api/cards', {
-            params: {
-                name: keywords
-            }
-        }).then(res => {
-            setCards(res.data.cards)
-        })
-    }, [ keywords, isOpen ])
-
-    useEffect(() => {
-        setCards(cards.filter(card => !myCards.includes(card)))
-    }, [myCards])
+    useEffect(() => {   
+       getCards(keywords).then(res => setCards(res))
+    }, [ keywords ])
 
     return (
         <Modal isOpen={isOpen} style={modalStyles} onRequestClose={onRequestClose}>
-            <SearchInput placeholder="Find Pokemon" onChange={(e) => setKeywords(e.target.value)}/>
+            <SearchInput placeholder="Find Pokemon" value={keywords} onChange={(e) => setKeywords(e.target.value)}/>
             <CardsContainer>
                 {
-                    cards.map((card, index) => <PokeCard key={`cards-${index}`} card={card}/>)
+                    cards.filter(card => !myCards.map(card => card.id).includes(card.id))
+                    .map((card, index) => <PokeCard key={`cards-${index}`} card={card}/>)
                 }
             </CardsContainer>
         </Modal>
@@ -46,7 +37,12 @@ function CardList({isOpen, onRequestClose}) {
 const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    overflow: auto;
+    height: 700px;
+    overflow-y:scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    
 `
 
 const SearchInput = styled.input`
@@ -70,7 +66,8 @@ const modalStyles = {
       marginRight : '-50%',
       transform : 'translate(-50%, -50%)',
       width: '850px',
-      height: '700px'             
+      height: '700px',
+      overflow: 'hidden'          
     }
   };
 

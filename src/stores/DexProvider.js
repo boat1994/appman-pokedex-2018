@@ -3,7 +3,7 @@ import React, { createContext, useReducer} from 'react'
 export const DexContext = createContext({})
 
 const initialState = {
-    myCards : []
+    myCards : [],
 }
 
 const dexReducer = (state, action) => {

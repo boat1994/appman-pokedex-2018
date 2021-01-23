@@ -21,7 +21,10 @@ const CardsContainer = styled.div`
 	display: flex;
 	flex-wrap: wrap;
     max-height: 620px;
-    overflow: auto;
+    overflow-y:scroll;
+    &::-webkit-scrollbar {
+        display: none;
+    }
 `
 
 export default CardList
