@@ -1,20 +1,23 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import Modal from 'react-modal'
 import styled from 'styled-components'
 import axios from 'axios'
 
+import { DexContext } from '../stores/DexProvider'
 import PokeCard from './PokeCard'
 
-function CardList() {
+function CardList({isOpen, onRequestClose}) {
 
     const [ cards, setCards ] = useState([])
     const [ keywords, setKeywords ] = useState("")
 
-    useEffect(() => {
-        fetchCards()
-    }, [ keywords ])
+    const { dex: { myCards } } = useContext(DexContext)
 
-    const fetchCards = () => {
+    useEffect(() => {
+        Modal.setAppElement('body');
+    })
+
+    useEffect(() => {
         axios.get('http://localhost:3030/api/cards', {
             params: {
                 name: keywords
@@ -22,14 +25,18 @@ function CardList() {
         }).then(res => {
             setCards(res.data.cards)
         })
-    }
+    }, [ keywords, isOpen ])
+
+    useEffect(() => {
+        setCards(cards.filter(card => !myCards.includes(card)))
+    }, [myCards])
 
     return (
-        <Modal isOpen={true} style={modalStyles}>
+        <Modal isOpen={isOpen} style={modalStyles} onRequestClose={onRequestClose}>
             <SearchInput placeholder="Find Pokemon" onChange={(e) => setKeywords(e.target.value)}/>
             <CardsContainer>
                 {
-                    cards.map(card => <PokeCard perRow={2} card={card}/>)
+                    cards.map((card, index) => <PokeCard key={`cards-${index}`} card={card}/>)
                 }
             </CardsContainer>
         </Modal>
@@ -39,7 +46,6 @@ function CardList() {
 const CardsContainer = styled.div`
     display: flex;
     flex-wrap: wrap;
-    height: 660px;
     overflow: auto;
 `
 
@@ -67,6 +73,5 @@ const modalStyles = {
       height: '700px'             
     }
   };
-
 
 export default CardList

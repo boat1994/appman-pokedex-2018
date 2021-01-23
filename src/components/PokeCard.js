@@ -1,57 +1,92 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 import PowerGauge from './PowerGauge'
+import { cardCalculate } from '../utils/calculate'
+import useHover from '../hooks/useHover'
 
-function PokeCard({card, perRow}) {
+import { DexContext } from '../stores/DexProvider'
+
+function PokeCard({card, isMyCard}) {
+ 
+    const [hoverRef, isHovered] = useHover()
+
+    const { addCard, deleteCard } = useContext(DexContext)
+
+    const {
+        hp,
+        str,
+        weak
+    } = cardCalculate(card)
+
+    const {
+        imageUrl,
+        name
+    } = card
 
     return (
-        <Card perRow>
+        <Card ref={hoverRef} isMyCard={isMyCard} isHovered={isHovered}>
             <Left>
-                <Image src={card.imageUrl}/>
+                <Image src={imageUrl}/>
             </Left>
             <Right>
-                <h3>{ card.name }</h3>
-                <PowerGauge name="HP" power={calHP(card.hp)}/>
-                <PowerGauge name="STR" power={calStr(card.attacks ? card.attacks.length : 0)}/>
-                <PowerGauge name="WEAK" power={calWeak(card.weaknesses ? card.weaknesses.length : 0)}/>
+                <h3>{ name }</h3>
+                <PowerGauge name="HP" power={hp} isMyCard={isMyCard} />
+                <PowerGauge name="STR" power={str} isMyCard={isMyCard} />
+                <PowerGauge name="WEAK" power={weak} isMyCard={isMyCard} />
             </Right>
+            <Action isHovered={isHovered} onClick={() => isMyCard ? deleteCard(card) : addCard(card)}>
+                {isMyCard ? "X" : "Add"}
+            </Action>
+        
         </Card>
     )
 }
 
-const calHP = (hp) => hp < 100 ? hp : 100
-const calStr = (str) => str * 50 > 100 ? str * 50 : 100
-const calWeak = (weak) => weak * 100 > 100 ? weak * 100 : 100
-const calHappiness = (card) => {
-    return 
-}
-
 const Card = styled.div`
-    height: 250px;
+    position: relative;
+    max-height: 200px;
     margin: 10px;
     padding: 10px;
     display:flex;
     width:100%;
     background-color: #eff2f7;
-    ${({perRow}) => {
-        const percent = perRow ? 100 / perRow : 100
-        return `flex: 0 ${percent}%`
+    ${({isMyCard}) => {
+        const percent = isMyCard ? 45 : 100
+        return `flex: 0 ${percent}%;`
+    }}
+    ${({isHovered}) => {
+        return isHovered && `
+            border-color: azure;
+            border-style: groove;
+        `
     }}
 `
 
 const Left = styled.div`
-    width: 30%;
+    width: auto;
     height: 100%;
 `
 
 const Image = styled.img`
-    width:100%;
-    height:100%;
+    max-width: 100%;
+    max-height: 100%;
 `
 
 const Right = styled.div`
     width: 70%;
     padding-left: 20px;
+`
+
+const Action = styled.div`
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+    cursor: pointer;
+    ${({isHovered}) => {
+        const display = isHovered ? 'block' : 'none'
+        return `display: ${display}`
+    }}
 `
 
 export default PokeCard

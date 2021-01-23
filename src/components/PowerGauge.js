@@ -1,7 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 
-function PowerGauge({ name, power }) {
+function PowerGauge({ name, power, isMyCard }) {
+
     return (
         <Container>
            <Label>
@@ -15,7 +16,7 @@ function PowerGauge({ name, power }) {
 }
 
 const Label = styled.div`
-width: 20%;
+    width: 20%;
 `
 
 const Container = styled.div`

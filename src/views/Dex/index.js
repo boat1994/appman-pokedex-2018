@@ -1,32 +1,27 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { DexContext } from '../../stores/DexProvider'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import axios from 'axios'
 
 import CardList from '../../components/CardList'
 import MyCardList from '../../components/MyCardList'
 
 function Dex() {
 
-    const { dex, addCard, DeleteCard } = useContext(DexContext)
-
+    const [cardListOpen, setCardLisOpen] = useState(false)
     
     return (
         <>
             <TopBar> <h1>My Pokédex</h1> </TopBar>
             <MyCardList />
             <BottomBar>
-                <CardModalButton> + </CardModalButton>
+                <CardModalButton onClick={() => setCardLisOpen(true)}> + </CardModalButton>
             </BottomBar>
-            <CardList />
+            <CardList isOpen={cardListOpen} onRequestClose={() => setCardLisOpen(false)} />
         </>
     )
 }
 
 const TopBar = styled.div`
-    position: absolute; 
-    width: 100%;
-    top: 0;
+    position: relative; 
     text-align: center;
 `
 const BottomBar = styled.div`
@@ -48,8 +43,5 @@ const CardModalButton = styled.button`
     font-size: 60px;
     border: none;
 `
-
-
-
 
 export default Dex

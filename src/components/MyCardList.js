@@ -1,20 +1,26 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import styled from 'styled-components'
 
+import PokeCard from './PokeCard'
+import { DexContext } from '../stores/DexProvider'
+
 function CardList() {
+
+    const { dex: { myCards } } = useContext(DexContext)
+
     return (
-        <MyCards>
-            this is my card list
-        </MyCards>
+        <CardsContainer>
+            {
+                myCards.map((card, index) => <PokeCard isMyCard={true} key={`cards-${index}`} card={card}/>)
+            }
+        </CardsContainer>
     )
 }
 
-
-const MyCards = styled.div`
-    margin-top: 75px;
-    display: flex;
-    flex-wrap: wrap;
-    height: 620px;
+const CardsContainer = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+    max-height: 620px;
     overflow: auto;
 `
 

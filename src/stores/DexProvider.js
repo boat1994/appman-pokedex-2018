@@ -3,7 +3,7 @@ import React, { createContext, useReducer} from 'react'
 export const DexContext = createContext({})
 
 const initialState = {
-    cards : []
+    myCards : []
 }
 
 const dexReducer = (state, action) => {
@@ -11,15 +11,15 @@ const dexReducer = (state, action) => {
         case 'ADD_CARD': 
         return {
             ...state,
-            cards: [
-                ...state.cards,
+            myCards: [
+                ...state.myCards,
                 action.payload
             ],
         }
         case 'DELETE_CARD': 
         return {
             ...state,
-            cards: state.cards.filter(card => card !== action.payload)
+            myCards: state.myCards.filter(card => card.id !== action.payload.id)
         }
         default: return state
     }
